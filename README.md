@@ -1,2 +1,2 @@
 # Tower-of-Hanoi
-Logic Programming Project
+## Logic Programming Project
