@@ -10,105 +10,104 @@
 
     <body>
 
-        <div>
-            <div>
+        <div class="cGame">
+            <div class="pHanoi">
 
-                <div>
-                    <div>
-                        <div></div>
-                        <div></div>
-                            <span></span>
-                            <span></span>
+                <div class="iRow"></div>
+                    <div class="stat">Ready
+                    <div class="sBox">
+                        <span class="sText">Move:</span>
+                        <span class="sValue">0</span>
                     </div>
-                    <div>
-                        <span></span>
-                        <span></span>
+                    <div class="sBox sInvalid">
+                        <span class="sText">Invalid</span>
+                        <span class="sValue">0</span>
                     </div>
-                    <div></div>
+                    <div class="tBox">00:00.0</div>
                 </div>
 
-                <div></div>
+                <div class="cTower"></div>
 
-                <div>
+                <div class="controls">
 
-                    <div>
-                        <label></label>
-                        <input type="number">
+                    <div class="cGroup">
+                        <label>Tower</label>
+                        <input type="number" min="3" max="6" value="3" step="1">
                     </div>
 
-                    <div>
-                        <label></label>
-                        <input type="number">
+                    <div class="cGroup">
+                        <label>Disk</label>
+                        <input type="number" min="3" max="6" value="3" step="1">
                     </div>
 
-                    <button></button>
-                    <button></button>
-                    <button></button>
-                    <button></button>
+                    <button>New Game</button>
+                    <button>Move Disk</button>
+                    <button>Auto Solve</button>
+                    <button>Sound</button>
 
                 </div>
                 
-                <div>
-                    <label></label>
-                    <input type="range">
-                    <span></span>
+                <div class="aRow">
+                    <label>Animation Speed:</label>
+                    <input type="range" min="1" max="10" value="5" step="1">
+                    <span class="spValue">5x</span>
                 </div>
 
             </div>
         </div>
 
-        <div>
-            <div>
+        <div class="mOverlay" aria-hidden="true">
+            <div class="mCard">
 
-                <div></div>
-                <h2></h2>
-                <p></p>
+                <div class="mTropy">🏆</div>
+                <h2>You Solved It!</h2>
+                <p class="mSubtitle">The tower has been rebuilt. Well done!</p>
 
-                <div>
+                <div class="mStats">
 
-                    <div>
-                        <span></span>
-                        <span></span>
-                        <span></span>
+                    <div class="mStat">
+                        <span class="mSIcon">💿</span>
+                        <span class="mSLabel">Disks</span>
+                        <span class="mSValue">3</span>
                     </div>
 
-                    <div>
-                        <span></span>
-                        <span></span>
-                        <span></span>
+                    <div class="mStat">
+                        <span class="mSIcon">🏛️</span>
+                        <span class="mSLabel">Towers</span>
+                        <span class="mSValue">3</span>
                     </div>
 
-                    <div>
-                        <span></span>
-                        <span></span>
-                        <span></span>
+                    <div class="mStat">
+                        <span class="mSIcon">✅</span>
+                        <span class="mSLabel">Moves</span>
+                        <span class="mSValue">0</span>
                     </div>
 
-                    <div>
-                        <span></span>
-                        <span></span>
-                        <span></span>
+                    <div class="mStat">
+                        <span class="mSIcon">❌</span>
+                        <span class="mSLabel">Invalid</span>
+                        <span class="mSValue">0</span>
                     </div>
 
-                    <div>
-                        <span></span>
-                        <span></span>
-                        <span></span>
+                    <div class="mStat mSWide">
+                        <span class="mSIcon">⏱️</span>
+                        <span class="mSLabel">Time</span>
+                        <span class="mSValue">00:00.0</span>
                     </div>
 
-                    <div>
-                        <span></span>
-                        <span></span>
-                        <span></span>
+                    <div class="mStat mSWide mSGold">
+                        <span class="mSIcon">⭐</span>
+                        <span class="mSLabel">Perfect score is</span>
+                        <span class="mSValue">7</span>
                     </div>
 
                 </div>
 
-                <p></p>
+                <p class="mMessage"></p>
 
-                <div>
-                    <button></button>
-                    <button></button>
+                <div class="mActions">
+                    <button class="mBtn mBPrimary">Play Again</button>
+                    <button class="mBtn mBSecondary">Close</button>
                 </div>
 
             </div>
