@@ -14,53 +14,53 @@
             <div class="pHanoi">
 
                 <div class="iRow"></div>
-                    <div class="stat">Ready
+                    <div class="stat" id="sMsg">Ready
                     <div class="sBox">
                         <span class="sText">Move:</span>
-                        <span class="sValue">0</span>
+                        <span class="sValue" id="mCounter">0</span>
                     </div>
                     <div class="sBox sInvalid">
                         <span class="sText">Invalid</span>
-                        <span class="sValue">0</span>
+                        <span class="sValue" id="iCounter">0</span>
                     </div>
-                    <div class="tBox">00:00.0</div>
+                    <div class="tBox" id="tDisplay">00:00.0</div>
                 </div>
 
-                <div class="cTower"></div>
+                <div class="cTower" id="tContaner"></div>
 
                 <div class="controls">
 
                     <div class="cGroup">
                         <label>Tower</label>
-                        <input type="number" min="3" max="6" value="3" step="1">
+                        <input type="number" id="tCInput" min="3" max="6" value="3" step="1">
                     </div>
 
                     <div class="cGroup">
                         <label>Disk</label>
-                        <input type="number" min="3" max="6" value="3" step="1">
+                        <input type="number" id="dCInput" min="3" max="6" value="3" step="1">
                     </div>
 
-                    <button>New Game</button>
-                    <button>Move Disk</button>
-                    <button>Auto Solve</button>
-                    <button>Sound</button>
+                    <button id="bReset">New Game</button>
+                    <button id="bMove">Move Disk</button>
+                    <button id="bAuto">Auto Solve</button>
+                    <button id="bMute">Sound</button>
 
                 </div>
                 
                 <div class="aRow">
                     <label>Animation Speed:</label>
-                    <input type="range" min="1" max="10" value="5" step="1">
-                    <span class="spValue">5x</span>
+                    <input type="range" id="sSlider" min="1" max="10" value="5" step="1">
+                    <span class="spValue" id="sValue">5x</span>
                 </div>
 
             </div>
         </div>
 
-        <div class="mOverlay" aria-hidden="true">
+        <div class="mOverlay" id="wModal" aria-hidden="true">
             <div class="mCard">
 
                 <div class="mTropy">🏆</div>
-                <h2>You Solved It!</h2>
+                <h2 id="wTitle">You Solved It!</h2>
                 <p class="mSubtitle">The tower has been rebuilt. Well done!</p>
 
                 <div class="mStats">
