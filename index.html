@@ -1,118 +1,56 @@
 <!DOCTYPE html>
 <html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hanoi · Pure Prolog Server</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="game-container">
+    <div class="hanoi-panel">
+      <div class="info-row">
+        <div class="status" id="statusMsg">Connecting to Prolog...</div>
+        <div class="stat-box">✅ <span id="moveCounter">0</span></div>
+        <div class="stat-box">❌ <span id="invalidCounter">0</span></div>
+        <div class="timer-box" id="timerDisplay">00:00.0</div>
+      </div>
 
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Tower of Hanoi</title>
-        <link rel="stylesheet" href="css/style.css">
-    </head>
+      <div class="towers-container" id="towersContainer"></div>
 
-    <body>
-
-        <div class="cGame">
-            <div class="pHanoi">
-
-                <div class="iRow"></div>
-                    <div class="stat" id="sMsg">Ready
-                    <div class="sBox">
-                        <span class="sText">Move:</span>
-                        <span class="sValue" id="mCounter">0</span>
-                    </div>
-                    <div class="sBox sInvalid">
-                        <span class="sText">Invalid</span>
-                        <span class="sValue" id="iCounter">0</span>
-                    </div>
-                    <div class="tBox" id="tDisplay">00:00.0</div>
-                </div>
-
-                <div class="cTower" id="tContaner"></div>
-
-                <div class="controls">
-
-                    <div class="cGroup">
-                        <label>Tower</label>
-                        <input type="number" id="tCInput" min="3" max="6" value="3" step="1">
-                    </div>
-
-                    <div class="cGroup">
-                        <label>Disk</label>
-                        <input type="number" id="dCInput" min="3" max="6" value="3" step="1">
-                    </div>
-
-                    <button id="bReset">New Game</button>
-                    <button id="bMove">Move Disk</button>
-                    <button id="bAuto">Auto Solve</button>
-                    <button id="bMute">Sound</button>
-
-                </div>
-                
-                <div class="aRow">
-                    <label>Animation Speed:</label>
-                    <input type="range" id="sSlider" min="1" max="10" value="5" step="1">
-                    <span class="spValue" id="sValue">5x</span>
-                </div>
-
-            </div>
+      <div class="controls">
+        <div class="control-group">
+          <label>Towers (3-8)</label>
+          <input type="number" id="towerCountInput" min="3" max="8" value="3">
         </div>
-
-        <div class="mOverlay" id="wModal" aria-hidden="true">
-            <div class="mCard">
-
-                <div class="mTropy">🏆</div>
-                <h2 id="wTitle">You Solved It!</h2>
-                <p class="mSubtitle">The tower has been rebuilt. Well done!</p>
-
-                <div class="mStats">
-
-                    <div class="mStat">
-                        <span class="mSIcon">💿</span>
-                        <span class="mSLabel">Disks</span>
-                        <span class="mSValue" id="mDisk">3</span>
-                    </div>
-
-                    <div class="mStat">
-                        <span class="mSIcon">🏛️</span>
-                        <span class="mSLabel">Towers</span>
-                        <span class="mSValue" id="mTowers">3</span>
-                    </div>
-
-                    <div class="mStat">
-                        <span class="mSIcon">✅</span>
-                        <span class="mSLabel">Moves</span>
-                        <span class="mSValue" id="mMoves">0</span>
-                    </div>
-
-                    <div class="mStat">
-                        <span class="mSIcon">❌</span>
-                        <span class="mSLabel">Invalid</span>
-                        <span class="mSValue" id="mIvalid">0</span>
-                    </div>
-
-                    <div class="mStat mSWide">
-                        <span class="mSIcon">⏱️</span>
-                        <span class="mSLabel">Time</span>
-                        <span class="mSValue" id="mTime">00:00.0</span>
-                    </div>
-
-                    <div class="mStat mSWide mSGold">
-                        <span class="mSIcon">⭐</span>
-                        <span class="mSLabel">Perfect score is</span>
-                        <span class="mSValue" id="mOptimal">7</span>
-                    </div>
-
-                </div>
-
-                <p class="mMessage" id="mMessage"></p>
-
-                <div class="mActions">
-                    <button class="mBtn mBPrimary" id="mPlayA">Play Again</button>
-                    <button class="mBtn mBSecondary" id="mClose">Close</button>
-                </div>
-
-            </div>
+        <div class="control-group">
+          <label>Disks (1-8)</label>
+          <input type="number" id="diskCountInput" min="1" max="8" value="3">
         </div>
+        <button id="resetBtn">⟳ New Game</button>
+        <button id="refreshBtn">🔄 Refresh App</button>
+        <button id="moveBtn" disabled>↗️ Move To...</button>
+        <button id="autoBtn">🤖 Auto Solve</button>
+      </div>
 
-    </body>
+      <div class="speed-row">
+        <label>Auto-Solve Speed: <span id="speedValue">5x</span></label>
+        <input type="range" id="speedSlider" min="1" max="10" value="5">
+      </div>
+    </div>
+  </div>
 
+  <div class="modal-overlay" id="winModal">
+    <div class="modal-card">
+      <h1>🏆 Solved!</h1>
+      <p>Time: <span id="modalTime"></span></p>
+      <p>Moves: <span id="modalMoves"></span> (Optimal: <span id="modalOptimal"></span>)</p>
+      <p>Invalid: <span id="modalInvalid"></span></p>
+      <button id="playAgainBtn">Play Again</button>
+    </div>
+  </div>
+
+  <script src="js/game.js"></script>
+</body>
 </html>
