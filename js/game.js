@@ -124,6 +124,23 @@ async function handlePegClick(clickedPeg) {
   }
 }
 
+// Fewest known moves for n disks on p pegs (Frame-Stewart), matching hanoi.pl
+const optimalCache = {};
+function optimalMoves(n, p) {
+  if (n === 0) return 0;
+  if (n === 1) return 1;
+  if (p < 3) return Infinity;
+  if (p === 3) return Math.pow(2, n) - 1;
+  const key = n + ',' + p;
+  if (key in optimalCache) return optimalCache[key];
+  let best = Infinity;
+  for (let k = 1; k < n; k++) {
+    best = Math.min(best, 2 * optimalMoves(k, p) + optimalMoves(n - k, p - 1));
+  }
+  optimalCache[key] = best;
+  return best;
+}
+
 function getSpeedFactor() { return 0.4 + (parseInt(speedSlider.value) - 1) * (3.6 / 9); }
 
 async function animateMove(fromPeg, toPeg, diskSize, newState) {
@@ -178,7 +195,10 @@ async function animateMove(fromPeg, toPeg, diskSize, newState) {
     stopTimer();
     document.getElementById('modalTime').textContent = timerDisplay.textContent;
     document.getElementById('modalMoves').textContent = moveCount;
-    document.getElementById('modalOptimal').textContent = Math.pow(2, parseInt(document.getElementById('diskCountInput').value)) - 1;
+    document.getElementById('modalOptimal').textContent = optimalMoves(
+      parseInt(document.getElementById('diskCountInput').value),
+      pegs.length
+    );
     document.getElementById('modalInvalid').textContent = invalidCount;
     document.getElementById('winModal').classList.add('show');
   }

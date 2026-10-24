@@ -53,7 +53,10 @@ api_solve(Request) :-
     Disks = DictIn.disks,
     Pegs = DictIn.pegs,
     To is Pegs - 1,
-    hanoi(Disks, 0, To, 1, Moves),
+    % Every peg except the source (0) and the target (last) is a spare
+    LastSpare is Pegs - 2,
+    numlist(1, LastSpare, Spares),
+    hanoi(Disks, 0, To, Spares, Moves),
     maplist(convert_move, Moves, JSONMoves),
     reply_json_dict(_{moves: JSONMoves}).
 
@@ -81,10 +84,53 @@ replace_nth(List, Index, NewElem, NewList) :-
     nth0(Index, List, _, Rest),
     nth0(Index, NewList, NewElem, Rest).
 
+% ------------------------------------------
+% Frame-Stewart solver (uses ALL the pegs)
+% ------------------------------------------
+% hanoi(+N, +From, +To, +Spares, -Moves)
+% Spares is the list of free pegs besides From and To, so the number of
+% pegs in play is length(Spares) + 2.
+%
+% With P pegs, move the top K disks onto one spare peg (using all P pegs),
+% move the remaining N-K disks to the target (using P-1 pegs, since the
+% spare holding the K disks is blocked), then move the K disks on top.
+% With 3 pegs this is exactly the classic 2^N - 1 solution.
+
 hanoi(0, _, _, _, []) :- !.
-hanoi(N, From, To, Via, Moves) :-
-    N > 0,
+hanoi(1, From, To, _, [move(From, To)]) :- !.
+hanoi(N, From, To, [Via | Rest], Moves) :-
+    N > 1,
+    length(Rest, R),
+    P is R + 3,                            % From + To + Via + Rest
+    best_k(N, P, K),
+    NK is N - K,
+    hanoi(K,  From, Via, [To | Rest],   Moves1),
+    hanoi(NK, From, To,  Rest,          Moves2),
+    hanoi(K,  Via,  To,  [From | Rest], Moves3),
+    append([Moves1, Moves2, Moves3], Moves).
+
+% fs_cost(+N, +P, -Cost): fewest moves for N disks on P pegs
+% (Frame-Stewart; fails if impossible, e.g. 2 disks on 2 pegs).
+:- table fs_cost/3.
+fs_cost(0, _, 0).
+fs_cost(1, P, 1) :- P >= 2.
+fs_cost(N, 3, Cost) :- N > 1, Cost is (1 << N) - 1.
+fs_cost(N, P, Cost) :-
+    N > 1, P > 3,
     N1 is N - 1,
-    hanoi(N1, From, Via, To, Moves1),
-    hanoi(N1, Via, To, From, Moves2),
-    append(Moves1, [move(From, To) | Moves2], Moves).
+    P1 is P - 1,
+    aggregate_all(min(C), split_cost(N, N1, P, P1, _, C), Cost).
+
+split_cost(N, N1, P, P1, K, Cost) :-
+    between(1, N1, K),
+    NK is N - K,
+    fs_cost(K, P, CK),
+    fs_cost(NK, P1, CNK),
+    Cost is 2 * CK + CNK.
+
+% best_k(+N, +P, -K): how many disks to park on the spare peg first
+best_k(N, 3, K) :- !, K is N - 1.
+best_k(N, P, K) :-
+    N1 is N - 1,
+    P1 is P - 1,
+    aggregate_all(min(C, Kc), split_cost(N, N1, P, P1, Kc, C), min(_, K)).
