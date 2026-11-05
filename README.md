@@ -6,6 +6,14 @@ A Tower of Hanoi game where the game logic runs in **SWI-Prolog**. The browser
 only draws the board and plays the animations. Prolog checks every move, solves
 the puzzle for you, and prints a log of everything that happens in the console.
 
+## Live demo
+
+Try it in your browser: https://discern-bankable-washday.ngrok-free.dev/
+
+The demo is hosted with [ngrok](https://ngrok.com/) from the author's computer,
+so it only works while the SWI-Prolog server is running there. If the link does
+not load, run the project yourself (see **Run it** below).
+
 ## Features
 
 - **3 to 8 towers and 1 to 8 disks**, set from the page.
