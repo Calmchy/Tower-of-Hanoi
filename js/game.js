@@ -17,6 +17,15 @@ const speedValue = document.getElementById('speedValue');
 const moveBtn = document.getElementById('moveBtn');
 const autoBtn = document.getElementById('autoBtn');
 
+// Tell the Prolog server about game events so it can print them in the SWI-Prolog console
+function logEvent(data) {
+  fetch('/api/event', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data)
+  }).catch(() => {});
+}
+
 function startTimer() {
   if (timerRunning) return;
   timerRunning = true;
@@ -200,6 +209,16 @@ async function animateMove(fromPeg, toPeg, diskSize, newState) {
       pegs.length
     );
     document.getElementById('modalInvalid').textContent = invalidCount;
+    if (!isSolving) {
+      logEvent({
+        event: 'solved',
+        disks: parseInt(document.getElementById('diskCountInput').value),
+        pegs: pegs.length,
+        moves: moveCount,
+        invalid: invalidCount,
+        time: timerDisplay.textContent
+      });
+    }
     document.getElementById('winModal').classList.add('show');
   }
 }
@@ -257,6 +276,13 @@ autoBtn.onclick = async () => {
       const valData = await valRes.json();
       await animateMove(m.from, m.to, pegs[m.from][pegs[m.from].length - 1], valData.newState);
     }
+    logEvent({
+      event: 'auto_done',
+      disks: parseInt(document.getElementById('diskCountInput').value),
+      pegs: pegs.length,
+      moves: moveCount,
+      time: timerDisplay.textContent
+    });
   } catch (e) {
     console.error(e);
   }
@@ -285,6 +311,7 @@ function initGame() {
   document.getElementById('diskCountInput').value = d;
 
   pegs = Array.from({ length: t }, (_, i) => i === 0 ? Array.from({ length: d }, (_, j) => d - j) : []);
+  logEvent({ event: 'new_game', disks: d, pegs: t });
   statusMsg.textContent = "Ready (Prolog Backend)";
   statusMsg.style.color = "#d4af37";
   render();
