@@ -10,7 +10,7 @@ the puzzle for you, and prints a log of everything that happens in the console.
 
 Try it in your browser: https://discern-bankable-washday.ngrok-free.dev/
 
-The demo is hosted with [ngrok](https://ngrok.com/) from the author's computer,
+The demo is hosted with [ngrok](https://ngrok.com/) from the author's mini-pc server,
 so it only works while the SWI-Prolog server is running there. If the link does
 not load, run the project yourself (see **Run it** below).
 
