@@ -60,8 +60,8 @@ function render() {
       const disk = document.createElement('div');
       disk.className = 'disk disk-' + size; 
       
-      const w = 40 + (size / parseInt(document.getElementById('diskCountInput').value)) * 70;
-      disk.style.setProperty('--w', w + 'px');
+      const w = 45 + (size / parseInt(document.getElementById('diskCountInput').value)) * 55;
+      disk.style.setProperty('--w', w + '%');
       
       if (selectedPeg === idx && i === sorted.length - 1) disk.classList.add('selected');
       stack.appendChild(disk);
